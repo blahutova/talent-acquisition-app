@@ -1,0 +1,12 @@
+<div class="main actor-index">
+      <div class="container">
+        <div class="row">
+          <% @categories.each do |c| %>
+          <div class="actor col-xs-2">
+            <h3><%= c.name %></h3>
+            <%= c.category_query %>
+          </div>
+          <% end %>
+        </div>
+      </div>
+</div>
