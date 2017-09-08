@@ -1,0 +1,12 @@
+<div class="main actor-index">
+      <div class="container">
+        <div class="row">
+          <% @queries.each do |q| %>
+          <div class="actor col-xs-2">
+            <h3><%= q.name %></h3>
+            <%= q.text_of_query %>
+          </div>
+          <% end %>
+        </div>
+      </div>
+</div>
