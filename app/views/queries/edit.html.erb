@@ -1,0 +1,70 @@
+<div>
+    <%= form_for(@query) do |q| %>
+
+    <%= q.text_field :name %>
+    <% if @type_of_query == "simple" %>
+    <h3>ALL group</h3>
+      <p>
+       <%= fields_for(@term_for_query) do |t| %>
+         <div>
+           <%= t.label "Delete some category from ALL group" %> <br />
+           <%= collection_select(:and_delete_terms, :id, @and_terms, :id, :category_name , {}, {:multiple => true}) %>
+         </div>
+       <% end %>
+      </p>
+      <p>
+       <%= fields_for(@term_for_query) do |t| %>
+         <div>
+           <%= t.label "ALL - All of these categories will be in the result" %> <br />
+           <%= collection_select(:and_categories, :id, @all_categories, :id, :name, {}, {:multiple => true}) %>
+         </div>
+       <% end %>
+      </p>
+
+
+      <h3>OR group</h3>
+      <p>
+       <%= fields_for(@term_for_query) do |t| %>
+         <div>
+           <%= t.label "Delete some category from OR group" %> <br />
+           <%= collection_select(:or_delete_terms, :id, @or_terms, :id, :category_name , {}, {:multiple => true}) %>
+         </div>
+       <% end %>
+      </p>
+      <p>
+       <%= fields_for(@term_for_query) do |t| %>
+         <div>
+           <%= t.label "ANY - At least one of these categories will be in the result" %> <br />
+           <%= collection_select(:or_categories, :id, @all_categories, :id, :name, {}, {:multiple => true}) %>
+         </div>
+       <% end %>
+      </p>
+
+      <h3>NOT group</h3>
+      <p>
+       <%= fields_for(@term_for_query) do |t| %>
+         <div>
+           <%= t.label "Delete some category from NONE group" %> <br />
+           <%= collection_select(:none_delete_terms, :id, @none_terms, :id, :category_name , {}, {:multiple => true}) %>
+         </div>
+       <% end %>
+      </p>
+      <p>
+       <%= fields_for(@term_for_query) do |t| %>
+         <div>
+           <%= t.label "NONE - None of these categories will be in the result" %> <br />
+           <%= collection_select(:not_categories, :id, @all_categories, :id, :name, {}, {:multiple => true}) %>
+         </div>
+       <% end %>
+      </p>
+
+
+    <% else %>
+     <h3>Complex query</h3>
+     <p><%= q.text_area :text_of_query %></p>
+    <% end %>
+
+    <%= q.submit "Update"%>
+    <% end %>
+
+</div>

@@ -3,8 +3,7 @@
   <p><%= @type_of_query %></p>
   <% if @type_of_query == "simple" %>
    <div>
-     <h3>ALL<h3>
-      <p>All of these categories will be in the result</p>
+     <h3>ALL - All of these categories will be in the result<h3>
       <p>
         <% @and_terms.each do |at| %>
         <h4><%=at.category.name %></h4>
@@ -12,8 +11,7 @@
       </p>
    </div>
    <div>
-     <h3>ANY<h3>
-      <p>At least one of these categories will be in the result</p>
+     <h3>ANY - At least one of these categories will be in the result<h3>
       <p>
         <% @or_terms.each do |ot| %>
         <h4><%=ot.category.name %></h4>
@@ -21,8 +19,7 @@
       </p>
    </div>
    <div>
-     <h3>NONE<h3>
-      <p>None of these categories will be in the result</p>
+     <h3>NONE - None of these categories will be in the result<h3>
       <p>
         <% @none_terms.each do |nt| %>
         <h4><%=nt.category.name %></h4>
@@ -33,5 +30,6 @@
    <h3>Complex query</h3>
    <p><%= @query.text_of_query %></p>
   <% end %>
+  <%= link_to "Edit", edit_query_path(@query) %>
 
 </div>
