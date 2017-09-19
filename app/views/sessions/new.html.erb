@@ -1,0 +1,7 @@
+<h1>Log in</h1>
+<p>Temporary "login", just enter the user id and you will see his data</p>
+<%= form_for(:session, url: login_path) do |f| %>
+  <%= f.label :id %>
+  <%= f.text_field :id %>
+  <%= f.submit "Log in"%>
+<% end %>

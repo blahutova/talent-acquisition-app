@@ -1,8 +1,9 @@
 class QueriesController < ApplicationController
 
   def index
-    @user = User.find(params[:user_id])
-    @queries = @user.queries
+    #user = User.find(session[:user_id])
+    user = current_user
+    @queries = user.queries
   end
 
   def show
@@ -27,7 +28,6 @@ class QueriesController < ApplicationController
     else
       @type_of_query = "complex"
     end
-    #@terms = @query.terms
   end
 
   def edit

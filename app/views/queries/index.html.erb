@@ -1,12 +1,9 @@
-<div class="main actor-index">
-      <div class="container">
-        <div class="row">
-          <% @queries.each do |q| %>
-          <div class="actor col-xs-2">
-            <h3><%= q.name %></h3>
-            <%= q.text_of_query %>
-          </div>
-          <% end %>
-        </div>
-      </div>
-</div>
+<% if logged_in? %>
+  <% @queries.each do |q| %>
+    <h3><%= link_to q.name, query_path(q) %></h3>
+  <% end %>
+<% else %>
+  <h3>You are not logged in!</h3>
+<% end %>
+
+<%= link_to "Log out", logout_path, method: :delete %>
