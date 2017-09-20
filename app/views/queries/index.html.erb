@@ -1,9 +1,14 @@
 <% if logged_in? %>
   <% @queries.each do |q| %>
     <h3><%= link_to q.name, query_path(q) %></h3>
+    <%= link_to "Delete", q, method: :delete, data: { confirm: "You sure?" } %>
+    <p>------------------------</p>
   <% end %>
 <% else %>
   <h3>You are not logged in!</h3>
 <% end %>
-
-<%= link_to "Log out", logout_path, method: :delete %>
+<br />
+<p>
+  <%= link_to 'New Query', new_query_path %>
+  <%= link_to "Log out", logout_path, method: :delete %>
+</p>

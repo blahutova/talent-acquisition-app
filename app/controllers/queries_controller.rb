@@ -1,14 +1,14 @@
 class QueriesController < ApplicationController
 
   def index
-    #user = User.find(session[:user_id])
     user = current_user
     @queries = user.queries
   end
 
   def show
+    #text.scan(/'([^']*)'/)
     @query = Query.find(params[:id])
-    if @query.text_of_query == ""
+    if @query.text_of_query.blank?
       @type_of_query = "simple"
       @terms = @query.terms
       @and_terms = Array.new
@@ -26,13 +26,14 @@ class QueriesController < ApplicationController
       end
 
     else
+      @terms = @query.terms
       @type_of_query = "complex"
     end
   end
 
   def edit
     @query = Query.find(params[:id])
-    if @query.text_of_query == ""
+    if @query.text_of_query.blank?
       @type_of_query = "simple"
       @terms = @query.terms
       @all_categories = Category.all
@@ -56,8 +57,6 @@ class QueriesController < ApplicationController
           @none_terms << t
         end
       end
-
-
     else
       @type_of_query = "complex"
     end
@@ -66,61 +65,61 @@ class QueriesController < ApplicationController
   def update
     @query = Query.find(params[:id])
 
-    params[:and_categories][:id].each do |category|
-      if !category.empty?
-        @query.terms.build(:category_id => category, operator: "AND")
+    if @query.text_of_query.blank?
+      params[:and_categories][:id].each do |category|
+        if !category.empty?
+          @query.terms.build(:category_id => category, operator: "AND")
+        end
       end
-    end
 
-    params[:or_categories][:id].each do |category|
-      if !category.empty?
-        @query.terms.build(:category_id => category, operator: "OR")
+      params[:or_categories][:id].each do |category|
+        if !category.empty?
+          @query.terms.build(:category_id => category, operator: "OR")
+        end
       end
-    end
 
-    params[:not_categories][:id].each do |category|
-      if !category.empty?
-        @query.terms.build(:category_id => category, operator: "NOT")
+      params[:not_categories][:id].each do |category|
+        if !category.empty?
+          @query.terms.build(:category_id => category, operator: "NOT")
+        end
       end
-    end
 
-    # params[:and_delete_categories][:id].each do |del_and_category|
-    #   print "bahahaha"
-    #   print del_and_category
-    #    if !del_and_category.empty?
-    #     #term_id = Category.find(:category_id => category).term
-    #     print "bahahaha"
-    #     print del_and_category
-    #     @term = Term.find_by(:category_id => del_and_category)
-    #     print "toto bude term"
-    #     print @term.id
-    #     @query.terms.destroy(@term)
-    #     # category.terms.delete(@term)
-    #    end
-    # end
+      params[:and_delete_terms][:id].each do |del_and_term|
+         if !del_and_term.empty?
+          #term_id = Category.find(:category_id => category).term
+          @query.terms.destroy(del_and_term)
+          # category.terms.delete(@term)
+         end
+      end
 
-    params[:and_delete_terms][:id].each do |del_and_term|
-       if !del_and_term.empty?
-        #term_id = Category.find(:category_id => category).term
-        @query.terms.destroy(del_and_term)
-        # category.terms.delete(@term)
-       end
-    end
+      params[:or_delete_terms][:id].each do |del_or_term|
+         if !del_or_term.empty?
+          #term_id = Category.find(:category_id => category).term
+          @query.terms.destroy(del_or_term)
+          # category.terms.delete(@term)
+         end
+      end
 
-    params[:or_delete_terms][:id].each do |del_or_term|
-       if !del_or_term.empty?
-        #term_id = Category.find(:category_id => category).term
-        @query.terms.destroy(del_or_term)
-        # category.terms.delete(@term)
-       end
-    end
-
-    params[:none_delete_terms][:id].each do |del_none_term|
-       if !del_none_term.empty?
-        #term_id = Category.find(:category_id => category).term
-        @query.terms.destroy(del_none_term)
-        # category.terms.delete(@term)
-       end
+      params[:none_delete_terms][:id].each do |del_none_term|
+         if !del_none_term.empty?
+          #term_id = Category.find(:category_id => category).term
+          @query.terms.destroy(del_none_term)
+          # category.terms.delete(@term)
+         end
+      end
+    else
+      #TODO
+      @query.terms.clear
+      # term = Term.create
+      # term.query = @query
+      # @query.categories_for_complex_query.each do |category|
+      #   term = Term.create
+      #   term.query = @query
+      #   term.category = category
+      # end
+      @query.categories << @query.categories_for_complex_query
+      print "TEST"
+      print @query.categories
     end
 
     if @query.update_attributes(query_params)
@@ -131,9 +130,50 @@ class QueriesController < ApplicationController
   end
 
   def destroy
-    Term.find(params[:id]).destroy
-    # flash[:success] = "Category from query deleted"
-    # redirect_to users_url
+  end
+
+  def new
+    @query = Query.new
+    @all_categories = Category.all
+  end
+
+  def create
+    @query = Query.new(query_params)
+    @query.user = current_user
+
+    if @query.text_of_query.blank?
+      params[:and_categories][:id].each do |category|
+        if !category.empty?
+          @query.terms.build(:category_id => category, operator: "AND")
+        end
+      end
+
+      params[:or_categories][:id].each do |category|
+        if !category.empty?
+          @query.terms.build(:category_id => category, operator: "OR")
+        end
+      end
+
+      params[:not_categories][:id].each do |category|
+        if !category.empty?
+          @query.terms.build(:category_id => category, operator: "NOT")
+        end
+      end
+    else
+      @query.categories << @query.categories_for_complex_query
+    end
+
+    if @query.save
+      redirect_to '/queries'
+    else
+      render 'new'
+    end
+  end
+
+  def destroy
+    Query.find(params[:id]).destroy
+    flash[:success] = "Query deleted"
+    redirect_to queries_path
   end
 
   private
