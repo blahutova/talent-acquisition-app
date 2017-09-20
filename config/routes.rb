@@ -14,9 +14,16 @@ Rails.application.routes.draw do
   get '/queries/:id' => 'queries#show', as: :query
   get '/queries/:id/edit' => 'queries#edit', as: :edit_query
   patch '/queries/:id' => 'queries#update'
-  delete '/queries/:id' => 'queries#destroy'#, as: :delete_query
-
+  delete '/queries/:id' => 'queries#destroy'
 
   resources :users
+
+  get '/languages' => 'languages#index', as: :languages
+  get '/languages/new' => 'languages#new', as: :new_language
+  post 'languages' => 'languages#create'
+  get '/languages/:id' => 'languages#show', as: :language
+  get '/languages/:id/edit' => 'languages#edit', as: :edit_language
+  patch '/languages/:id' => 'languages#update'
+  delete '/languages/:id' => 'languages#destroy'
 
 end

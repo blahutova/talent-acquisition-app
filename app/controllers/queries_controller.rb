@@ -129,9 +129,6 @@ class QueriesController < ApplicationController
     end
   end
 
-  def destroy
-  end
-
   def new
     @query = Query.new
     @all_categories = Category.all
