@@ -1,12 +1,14 @@
-<div class="main actor-index">
-      <div class="container">
-        <div class="row">
-          <% @categories.each do |c| %>
-          <div class="actor col-xs-2">
-            <h3><%= c.name %></h3>
-            <%= c.category_query %>
-          </div>
-          <% end %>
-        </div>
-      </div>
-</div>
+<% if logged_in? %>
+  <% @categories.each do |c| %>
+    <h3><%= link_to c.name, category_path(c) %></h3>
+    <%= link_to "Delete", c, method: :delete, data: { confirm: "You sure?" } %>
+    <p>------------------------</p>
+  <% end %>
+<% else %>
+  <h3>You are not logged in!</h3>
+<% end %>
+<br />
+<p>
+  <%= link_to 'New Category', new_category_path %>
+  <%= link_to "Log out", logout_path, method: :delete %>
+</p>

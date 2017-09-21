@@ -6,7 +6,20 @@ Rails.application.routes.draw do
   delete '/logout' =>  'sessions#destroy', as: :logout
 
   get '/categories' => 'categories#index'
+  get '/categories/new' => 'categories#new', as: :new_category
+  post 'categories' => 'categories#create'
   get '/categories/:id' => 'categories#show', as: :category
+  get '/categories/:id/edit' => 'categories#edit', as: :edit_category
+  patch '/categories/:id' => 'categories#update'
+  delete '/categories/:id' => 'categories#destroy'
+  get '/categories/:category_id/languages/:language_id/translations' => 'translations#index', as: :translations
+
+  get '/translations/:id' => 'translations#show', as: :translation
+  patch '/translations/:id' => 'translations#update'
+  get '/translations/:id/edit' => 'translations#edit', as: :edit_translation
+  get '/categories/:category_id/languages/:language_id/translations/new' => 'translations#new', as: :new_translation
+  post '/categories/:category_id/languages/:language_id/translations' => 'translations#create'
+  delete '/translations/:id' => 'translations#destroy'
 
   get '/queries' => 'queries#index', as: :queries
   get '/queries/new' => 'queries#new', as: :new_query

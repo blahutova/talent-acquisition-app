@@ -1,0 +1,6 @@
+<h3> Category:  <%= @translation.category_name %> </h3>
+<h3> Language:  <%= @translation.language_name %> </h3>
+<%= form_for(@translation) do |t| %>
+  <%= t.text_area :translated_query %>
+  <%= t.submit "Edit a translation"%>
+<% end %>
