@@ -5,4 +5,8 @@ class Term < ApplicationRecord
   def category_name
     category.name
   end
+
+  def category_query
+    category.category_query
+  end
 end

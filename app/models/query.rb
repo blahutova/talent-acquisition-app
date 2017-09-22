@@ -7,27 +7,7 @@ class Query < ApplicationRecord
 
   def expanded_query_linkedin
     if text_of_query.blank?
-      # expanded_query = ""
-      # and_terms = Array.new
-      # or_terms = Array.new
-      # not_terms = Array.new
-      #
-      # terms.each do |term|
-      #   if term.operator == "AND"
-      #     and_terms << term
-      #   elsif term.operator == "OR"
-      #     or_terms << term
-      #   else
-      #     not_terms << term
-      #   end
-      # end
-      #
-      # and_terms.each do |ands|
-      #   expanded_query += "("
-      #
-      # end
-      #
-      #
+      expanded_query = expand_simple_query
     else
       splitted_query = text_of_query.split("'")
       expanded_query = ""
@@ -47,23 +27,143 @@ class Query < ApplicationRecord
     expanded_query
   end
 
-  def categories_for_complex_query
-    splitted_query = text_of_query.split("'")
-    all_categories = Category.all
-    all_categories_names = Array.new
-    categories_for_query = Array.new
-    all_categories.each do |category|
-      all_categories_names << category.name
-    end
-    splitted_query.each do |part_of_query|
-      if all_categories_names.include? part_of_query
-        category = Category.find_by(name: part_of_query)
-        if (!categories.include? category)
-          categories_for_query << category
-        end
+  # def categories_for_complex_query
+  #   splitted_query = text_of_query.split("'")
+  #   all_categories = Category.all
+  #   all_categories_names = Array.new
+  #   categories_for_query = Array.new
+  #   all_categories.each do |category|
+  #     all_categories_names << category.name
+  #   end
+  #   splitted_query.each do |part_of_query|
+  #     if all_categories_names.include? part_of_query
+  #       category = Category.find_by(name: part_of_query)
+  #       if (!categories.include? category)
+  #         categories_for_query << category
+  #       end
+  #     end
+  #   end
+  #   categories_for_query
+  # end
+
+  def build_simple_query
+    simple_query = ""
+    and_terms = Array.new
+    or_terms = Array.new
+    not_terms = Array.new
+
+    terms.each do |term|
+      if term.operator == "AND"
+        and_terms << term
+      elsif term.operator == "OR"
+        or_terms << term
+      else
+        not_terms << term
       end
     end
-    categories_for_query
+
+    if !and_terms.empty?
+      simple_query += "( "
+    end
+    last = and_terms.size - 1
+    counter = 0
+    and_terms.each do |and_term|
+      if (counter == last)
+        simple_query += and_term.category_name + ") "
+      else
+        simple_query += and_term.category_name + " " + and_term.operator + " "
+      end
+      counter += 1
+    end
+
+    if !or_terms.empty?
+      simple_query += "AND ( "
+    end
+    last = or_terms.size - 1
+    counter = 0
+    or_terms.each do |or_term|
+      if (counter == last)
+        simple_query += or_term.category_name + ") "
+      else
+        simple_query += or_term.category_name + " " + or_term.operator + " "
+      end
+      counter += 1
+    end
+
+    if !not_terms.empty?
+      simple_query += "AND NOT ( "
+    end
+    last = not_terms.size - 1
+    counter = 0
+    not_terms.each do |not_term|
+      if (counter == last)
+        simple_query += not_term.category_name + ") "
+      else
+        simple_query += not_term.category_name + " OR "
+      end
+      counter += 1
+    end
+    simple_query
+  end
+
+  def expand_simple_query
+    simple_query = ""
+    and_terms = Array.new
+    or_terms = Array.new
+    not_terms = Array.new
+
+    terms.each do |term|
+      if term.operator == "AND"
+        and_terms << term
+      elsif term.operator == "OR"
+        or_terms << term
+      else
+        not_terms << term
+      end
+    end
+
+    if !and_terms.empty?
+      simple_query += "( "
+    end
+    last = and_terms.size - 1
+    counter = 0
+    and_terms.each do |and_term|
+      if (counter == last)
+        simple_query += and_term.category_query + ") "
+      else
+        simple_query += and_term.category_query + " " + and_term.operator + " "
+      end
+      counter += 1
+    end
+
+    if !or_terms.empty?
+      simple_query += "AND ( "
+    end
+    last = or_terms.size - 1
+    counter = 0
+    or_terms.each do |or_term|
+      if (counter == last)
+        simple_query += or_term.category_query + ") "
+      else
+        simple_query += or_term.category_query + " " + or_term.operator + " "
+      end
+      counter += 1
+    end
+
+    if !not_terms.empty?
+      simple_query += "AND NOT ( "
+    end
+    last = not_terms.size - 1
+    counter = 0
+    not_terms.each do |not_term|
+      if (counter == last)
+        simple_query += not_term.category_query + ") "
+      else
+        simple_query += not_term.category_query + " OR "
+      end
+      counter += 1
+    end
+    simple_query
   end
 
 end

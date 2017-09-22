@@ -1,7 +1,6 @@
 <div>
   <h1><%= @query.name %> </h1>
   <p><%= @type_of_query %></p>
-  <p><%= @query.categories_for_complex_query %></p>
   <% if @type_of_query == "simple" %>
    <div>
      <h3>ALL - All of these categories will be in the result<h3>
@@ -27,6 +26,8 @@
         <% end %>
       </p>
    </div>
+   <h2>Your query</h2>
+   <p><%= @query.build_simple_query %></p>
    <h2>Expanded text of the query</h2>
    <p><%= @query.expanded_query_linkedin %></p>
   <% else %>

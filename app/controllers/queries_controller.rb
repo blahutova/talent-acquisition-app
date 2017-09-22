@@ -109,7 +109,7 @@ class QueriesController < ApplicationController
       end
     else
       #TODO
-      @query.terms.clear
+      @query.categories.clear
       # term = Term.create
       # term.query = @query
       # @query.categories_for_complex_query.each do |category|
@@ -117,7 +117,8 @@ class QueriesController < ApplicationController
       #   term.query = @query
       #   term.category = category
       # end
-      @query.categories << @query.categories_for_complex_query
+      new_text_of_query = params[:query][:text_of_query]
+      @query.categories << categories_for_complex_query(@query, new_text_of_query)
       print "TEST"
       print @query.categories
     end
@@ -176,6 +177,27 @@ class QueriesController < ApplicationController
   private
   def query_params
     params.require(:query).permit(:name, :text_of_query)
+  end
+
+  private
+  def categories_for_complex_query(query, new_text_of_query)
+    splitted_query = new_text_of_query.split("'")
+    categories = query.categories
+    all_categories = Category.all
+    all_categories_names = Array.new
+    categories_for_query = Array.new
+    all_categories.each do |category|
+      all_categories_names << category.name
+    end
+    splitted_query.each do |part_of_query|
+      if all_categories_names.include? part_of_query
+        category = Category.find_by(name: part_of_query)
+        if (!categories.include? category)
+          categories_for_query << category
+        end
+      end
+    end
+    categories_for_query
   end
 
 end
