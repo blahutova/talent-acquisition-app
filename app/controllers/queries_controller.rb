@@ -2,33 +2,42 @@ class QueriesController < ApplicationController
 
   def index
     user = current_user
-    @queries = user.queries
+    if !user.blank?
+      @queries = user.queries
+    else
+      render html: "404 - Page not found"
+    end
+
   end
 
   def show
     #text.scan(/'([^']*)'/)
-    @query = Query.find(params[:id])
-    if @query.text_of_query.blank?
-      @type_of_query = "simple"
-      @terms = @query.terms
-      @and_terms = Array.new
-      @or_terms = Array.new
-      @none_terms = Array.new
+    if Query.exists?(params[:id])
+      @query = Query.find(params[:id])
+      if @query.text_of_query.blank?
+        @type_of_query = "simple"
+        @terms = @query.terms
+        @and_terms = Array.new
+        @or_terms = Array.new
+        @none_terms = Array.new
 
-      @terms.each do |t|
-        if t.operator == "AND"
-          @and_terms << t
-        elsif t.operator == "OR"
-          @or_terms << t
-        else
-          @none_terms << t
+        @terms.each do |t|
+          if t.operator == "AND"
+            @and_terms << t
+          elsif t.operator == "OR"
+            @or_terms << t
+          else
+            @none_terms << t
+          end
         end
-      end
 
-    else
-      @terms = @query.terms
-      @type_of_query = "complex"
-    end
+      else
+        @terms = @query.terms
+        @type_of_query = "complex"
+      end
+  else
+      render html: "404 - Page not found"
+  end
   end
 
   def edit
@@ -158,7 +167,8 @@ class QueriesController < ApplicationController
         end
       end
     else
-      @query.categories << @query.categories_for_complex_query
+      new_text_of_query = params[:query][:text_of_query]
+      @query.categories << categories_for_complex_query(@query, new_text_of_query)
     end
 
     if @query.save

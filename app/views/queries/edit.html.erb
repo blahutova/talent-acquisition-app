@@ -1,6 +1,7 @@
+<% if logged_in? %>
 <div>
     <%= form_for(@query) do |q| %>
-
+    <%= render 'shared/error_messages' %>
     <%= q.text_field :name %>
     <% if @type_of_query == "simple" %>
     <h3>ALL group</h3>
@@ -68,3 +69,6 @@
     <% end %>
 
 </div>
+<% else %>
+  <h3>You are not logged in!</h3>
+<% end %>

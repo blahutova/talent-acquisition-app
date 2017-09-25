@@ -1,3 +1,4 @@
+<% if logged_in? %>
 <div>
   <h1><%= @query.name %> </h1>
   <p><%= @type_of_query %></p>
@@ -44,3 +45,7 @@
   <%= link_to "Edit", edit_query_path(@query) %>
 
 </div>
+
+<% else %>
+  <h3>You are not logged in!</h3>
+<% end %>

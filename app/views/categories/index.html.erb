@@ -4,10 +4,10 @@
     <%= link_to "Delete", c, method: :delete, data: { confirm: "You sure?" } %>
     <p>------------------------</p>
   <% end %>
+  <br />
+  <p>
+    <%= link_to 'New Category', new_category_path %>
+  </p>
 <% else %>
   <h3>You are not logged in!</h3>
 <% end %>
-<br />
-<p>
-  <%= link_to 'New Category', new_category_path %>
-</p>

@@ -1,5 +1,10 @@
-<%= form_for(@language) do |l| %>
-<%= l.label "Name of the language" %>
-<%= l.text_field :name %>
-<%= l.submit "Update"%>
+<% if logged_in? %>
+  <%= form_for(@language) do |l| %>
+  <%= render 'shared/error_messages' %>
+  <%= l.label "Name of the language" %>
+  <%= l.text_field :name %>
+  <%= l.submit "Update"%>
+  <% end %>
+<% else %>
+    <h3>You are not logged in!</h3>
 <% end %>

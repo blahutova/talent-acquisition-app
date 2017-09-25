@@ -1,7 +1,12 @@
+<% if logged_in? %>
 <%= form_for(@category) do |c| %>
+<%= render 'shared/error_messages' %>
   <%= c.label "Name of the category" %>
   <%= c.text_area :name %>
   <%= c.label "Query of the category" %>
   <%= c.text_area :category_query %>
   <%= c.submit "Create"%>
+<% end %>
+<% else %>
+  <h3>You are not logged in!</h3>
 <% end %>

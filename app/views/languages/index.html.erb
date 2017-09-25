@@ -1,13 +1,13 @@
 <% if logged_in? %>
-  <% @languages.each do |l| %>
-    <h3><%= link_to l.name, language_path(l) %></h3>
-    <%= link_to "Delete", l, method: :delete, data: { confirm: "You sure?" } %>
-    <p>------------------------</p>
-  <% end %>
+    <% @languages.each do |l| %>
+      <h3><%= link_to l.name, language_path(l) %></h3>
+      <%= link_to "Delete", l, method: :delete, data: { confirm: "You sure?" } %>
+      <p>------------------------</p>
+    <% end %>
+  <br />
+  <p>
+    <%= link_to 'New Language', new_language_path %>
+  </p>
 <% else %>
   <h3>You are not logged in!</h3>
 <% end %>
-<br />
-<p>
-  <%= link_to 'New Language', new_language_path %>
-</p>

@@ -1,19 +1,23 @@
-<h3><%= @category.name %></h3>
-<p><%= @category.category_query %></p>
-<h2>Translations</h2>
-<p>
-<% @translations.each do |t| %>
-<%= t.language_name %>
-<br />
-<%= t.translated_query %>
-<br />
-<%= link_to "Edit translation", edit_translation_path(t) %>
-<%= link_to "Delete translation", t, method: :delete, data: { confirm: "You sure?" } %>
-<% end %>
-</p>
-<%= link_to "Edit Category", edit_category_path(@category) %>
-<br />
-<%= @languages_for_add.each do |l| %>
-    <%= link_to "Add translation for " + l.name, new_translation_path(@category, l.id) %>
-    <br />
+<% if logged_in? %>
+  <h3><%= @category.name %></h3>
+  <p><%= @category.category_query %></p>
+  <h2>Translations</h2>
+  <p>
+  <% @translations.each do |t| %>
+  <%= t.language_name %>
+  <br />
+  <%= t.translated_query %>
+  <br />
+  <%= link_to "Edit translation", edit_translation_path(t) %>
+  <%= link_to "Delete translation", t, method: :delete, data: { confirm: "You sure?" } %>
+  <% end %>
+  </p>
+  <%= link_to "Edit Category", edit_category_path(@category) %>
+  <br />
+  <%= @languages_for_add.each do |l| %>
+      <%= link_to "Add translation for " + l.name, new_translation_path(@category, l.id) %>
+      <br />
+  <% end %>
+<% else %>
+  <h3>You are not logged in!</h3>
 <% end %>

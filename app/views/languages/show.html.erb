@@ -1,2 +1,6 @@
-<h3><%= @language.name %></h3>
-<%= link_to "Edit", edit_language_path(@language) %>
+<% if logged_in? %>
+  <h3><%= @language.name %></h3>
+  <%= link_to "Edit", edit_language_path(@language) %>
+<% else %>
+  <h3>You are not logged in!</h3>
+<% end %>

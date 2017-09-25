@@ -11,7 +11,9 @@
         </script>
   </head>
 
+<% if logged_in? %>
   <div>
+    <%= render 'shared/error_messages' %>
     <fieldset>
       <legend>Create query</legend>
         <p>
@@ -67,4 +69,8 @@
         </div>
     </fieldset>
   </div>
+
+  <% else %>
+    <h3>You are not logged in!</h3>
+  <% end %>
 </html>
